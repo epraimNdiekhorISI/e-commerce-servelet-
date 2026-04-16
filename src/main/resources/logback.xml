@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- ===== APPENDER CONSOLE ===== -->
+    <!-- Affiche les logs dans la console IntelliJ / terminal -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Format : [NIVEAU] date heure - NomClasse - message -->
+            <pattern>%highlight([%-5level]) %d{yyyy-MM-dd HH:mm:ss} - %cyan(%logger{20}) - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ===== APPENDER FICHIER ===== -->
+    <!-- Écrit les logs dans un fichier qui tourne chaque jour -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Fichier de log courant -->
+        <file>logs/ecommerce.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Un nouveau fichier par jour : ecommerce-2026-04-14.log -->
+            <fileNamePattern>logs/ecommerce-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Garde les logs des 30 derniers jours -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %logger{20} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ===== LOGGER DE L'APPLICATION ===== -->
+    <!-- Niveau DEBUG pour notre code → on voit tout -->
+    <logger name="com.groupeisi.company" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- ===== LOGGER HIBERNATE ===== -->
+    <!-- Niveau WARN pour Hibernate → on voit seulement les erreurs -->
+    <logger name="org.hibernate" level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- ===== LOGGER RACINE ===== -->
+    <!-- Niveau INFO pour tout le reste -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
